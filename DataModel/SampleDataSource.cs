@@ -83,7 +83,7 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.DataModel
                         itemContent,
                         group1,
                         typeof(ScrollViewerSample)));
-            group1.Items.Add(
+            /*group1.Items.Add(
                     new SampleDataItem(
                         "Group-1-Item-6",
                         "Kinect Pointer Events",
@@ -92,8 +92,8 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.DataModel
                         "Example of how to get KinectPointerPoints.",
                         itemContent,
                         group1,
-                        typeof(KinectPointerPointSample)));
-            group1.Items.Add(
+                        typeof(KinectPointerPointSample)));*/
+           /* group1.Items.Add(
                     new SampleDataItem(
                         "Group-1-Item-7",
                         "Engagement and Cursor Settings",
@@ -102,8 +102,8 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.DataModel
                         "Enables user to switch between engagement models and cursor visuals.",
                         itemContent,
                         group1,
-                        typeof(EngagementSettings)));
-            group1.Items.Add(
+                        typeof(EngagementSettings)));*/
+           /* group1.Items.Add(
                     new SampleDataItem(
                         "Group-1-Item-6",
                         "Item Title: 6",
@@ -111,8 +111,8 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.DataModel
                         SampleDataSource.darkGrayImage,
                         "Item Description: Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
                         itemContent,
-                        group1));
-            group1.Items.Add(
+                        group1));*/
+            /*group1.Items.Add(
                     new SampleDataItem(
                         "Group-1-Item-7",
                         "Item Title: 7",
@@ -1256,7 +1256,7 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.DataModel
                     SampleDataSource.mediumGrayImage,
                     "Item Description: Pellentesque porta, mauris quis interdum vehicula, urna sapien ultrices velit, nec venenatis dui odio in augue. Cras posuere, enim a cursus convallis, neque turpis malesuada erat, ut adipiscing neque tortor ac erat.",
                     itemContent,
-                    group1));
+                    group1));*/
             this.AllGroups.Add(group1);
         }
 
