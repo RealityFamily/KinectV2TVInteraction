@@ -141,7 +141,7 @@
     <DataTemplate x:Key="VideoTemplate">
         <Button Margin="15" Style="{StaticResource KinectTileButton}">
             <Border>
-                <Grid Width="600" Height="600" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
+                <Grid Width="600" Height="350" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
                         <Image x:Name="Image" Source="{Binding SampleDataItem.Source}" Stretch="UniformToFill"  Margin="0 0 0 15"/>
                         <TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" FontSize="45" Margin="15 0"/>

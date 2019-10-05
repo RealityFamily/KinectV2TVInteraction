@@ -34,21 +34,17 @@
             <Grid HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Bottom">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Margin="15" Click="Button_Click" x:Name="Left" Grid.Column="0" Width="70" Height="70" Style="{StaticResource KinectTileButton}">
+                <Button Margin="15" Click="Button_Click" x:Name="Left" Grid.Column="0" Width="70" Height="70" Style="{StaticResource KinectTileButton}" Visibility="Hidden">
                     <Button.Content>
                         <Grid Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
                             <TextBlock Text="&lt;" FontSize="30" Margin="15" HorizontalAlignment="Center" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}"/>
                         </Grid>
                     </Button.Content>
                 </Button>
-                <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
-                    <StackPanel x:Name="ImageListView" Orientation="Horizontal"/>
-                </ScrollViewer>
-                <Button Margin="15" Click="Button_Click" x:Name="Right" Grid.Column="2" Width="70" Height="70" Style="{StaticResource KinectTileButton}" Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
+                <Button Margin="15" Click="Button_Click" x:Name="Right" Grid.Column="1" Width="70" Height="70" Style="{StaticResource KinectTileButton}" Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
                     <Button.Content>
                         <Grid Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
                             <TextBlock Text="&gt;" FontSize="30" Margin="15" HorizontalAlignment="Center" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}"/>

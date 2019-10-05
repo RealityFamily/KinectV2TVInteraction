@@ -97,7 +97,7 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.DataModel
                     "Game-" + i.ToString(),
                     new DirectoryInfo(Game).Name,
                     string.Empty,
-                    SampleDataItem.TaskType.Page,
+                    SampleDataItem.TaskType.Execute,
                     typeof(VideoPage),
                     SampleDataSource.StringToArr(filePath)));
                 i++;

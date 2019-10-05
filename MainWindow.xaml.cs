@@ -8,7 +8,10 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Windows;
+    using System.Windows.Automation.Peers;
+    using System.Windows.Automation.Provider;
     using System.Windows.Controls;
     using Microsoft.Kinect;
     using Microsoft.Kinect.Wpf.Controls;
@@ -86,7 +89,14 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
                     }
                     this.itemsControl.ItemTemplate = (DataTemplate) this.FindResource(type + "Template");
                     this.itemsControl.ItemsSource = SampleDataSource.GetGroup(sampleDataItem.NewGroup);
+                }
+                if (sampleDataItem.Task == SampleDataItem.TaskType.Execute && sampleDataItem.Parametrs != null)
+                {
+                    Process.Start((string) sampleDataItem.Parametrs[0]);
 
+                    ButtonAutomationPeer peer = new ButtonAutomationPeer(backButton);
+                    IInvokeProvider invokeProv = peer.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
+                    invokeProv.Invoke();
                 }
             }
             else

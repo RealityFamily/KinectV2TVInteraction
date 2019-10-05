@@ -41,6 +41,11 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.Pages
             image.EndInit();
 
             CurrentImage.Source = image;
+
+            if (ImageList.Count == 1)
+            {
+                Right.Visibility = System.Windows.Visibility.Hidden;
+            }
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -59,6 +64,13 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.Pages
                     image.EndInit();
 
                     CurrentImage.Source = image;
+
+                    Right.Visibility = System.Windows.Visibility.Visible;
+
+                    if (index - 1 == 0)
+                    {
+                        Left.Visibility = System.Windows.Visibility.Hidden;
+                    }
                 }
                 break;
             case "Right":
@@ -70,6 +82,13 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.Pages
                     image.EndInit();
 
                     CurrentImage.Source = image;
+
+                    Left.Visibility = System.Windows.Visibility.Visible;
+
+                    if(index + 2 == ImageList.Count)
+                    {
+                        Right.Visibility = System.Windows.Visibility.Hidden;
+                    }
                 }
                 break;
             }
