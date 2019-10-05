@@ -6,7 +6,9 @@
 
 namespace Microsoft.Samples.Kinect.ControlsBasics
 {
+    using System;
     using System.Windows.Controls;
+    using System.Windows.Media.Imaging;
 
     /// <summary>
     /// Interaction logic for ScrollViewerSample
@@ -16,9 +18,13 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
         /// <summary>
         /// Initializes a new instance of the <see cref="ScrollViewerSample"/> class.
         /// </summary>
-        public ScrollViewerSample()
+        public ScrollViewerSample(string ImageSource)
         {
             this.InitializeComponent();
+
+            BitmapImage bi3 = new BitmapImage(new Uri(ImageSource, UriKind.Relative));
+
+            ImageField.Source = bi3;
         }
     }
 }

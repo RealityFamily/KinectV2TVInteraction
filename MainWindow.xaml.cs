@@ -7,6 +7,7 @@
 namespace Microsoft.Samples.Kinect.ControlsBasics
 {
     using System;
+    using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Controls;
     using Microsoft.Kinect;
@@ -18,12 +19,18 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
     /// </summary>
     public partial class MainWindow
     {
+        private List<string> history = new List<string>();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class. 
         /// </summary>
         public MainWindow()
         {
             this.InitializeComponent();
+
+            CreateData.GetAllVideos();
+            CreateData.GetNewsFromSite();
+            CreateData.GetGames();
 
             KinectRegion.SetKinectRegion(this, kinectRegion);
 
@@ -34,7 +41,9 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
             this.kinectRegion.KinectSensor = KinectSensor.GetDefault();
 
             //// Add in display content
-            var sampleDataSource = SampleDataSource.GetGroup("Group-1");
+            var sampleDataSource = SampleDataSource.GetGroup("Menu");
+            history.Add("Menu");
+            this.itemsControl.ItemTemplate = (DataTemplate) this.FindResource(sampleDataSource.TypeGroup + "Template");
             this.itemsControl.ItemsSource = sampleDataSource;
         }
 
@@ -48,10 +57,37 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
             var button = (Button)e.OriginalSource;
             SampleDataItem sampleDataItem = button.DataContext as SampleDataItem;
 
-            if (sampleDataItem != null && sampleDataItem.NavigationPage != null)
+            if (sampleDataItem != null)
             {
-                backButton.Visibility = System.Windows.Visibility.Visible;
-                navigationRegion.Content = Activator.CreateInstance(sampleDataItem.NavigationPage);
+                if (sampleDataItem.Task == SampleDataItem.TaskType.Page && sampleDataItem.NavigationPage != null)
+                {
+                    backButton.Visibility = System.Windows.Visibility.Visible;
+                    navigationRegion.Content = Activator.CreateInstance(sampleDataItem.NavigationPage, sampleDataItem.Parametrs);
+                } 
+                if (sampleDataItem.Task == SampleDataItem.TaskType.ChangeGroup && sampleDataItem.NewGroup != null)
+                {
+                    history.Add(sampleDataItem.NewGroup);
+                    backButton.Visibility = System.Windows.Visibility.Visible;
+                    var type = SampleDataSource.GetGroup(sampleDataItem.NewGroup).TypeGroup;
+                    switch (type)
+                    {
+                        case SampleDataCollection.GroupType.Menu:
+                            scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                            scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                            break;
+                        case SampleDataCollection.GroupType.News:
+                            scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                            scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                            break;
+                        case SampleDataCollection.GroupType.Courses:
+                            scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                            scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                            break;
+                    }
+                    this.itemsControl.ItemTemplate = (DataTemplate) this.FindResource(type + "Template");
+                    this.itemsControl.ItemsSource = SampleDataSource.GetGroup(sampleDataItem.NewGroup);
+
+                }
             }
             else
             {
@@ -79,8 +115,41 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
         /// <param name="e">Event arguments</param>
         private void GoBack(object sender, RoutedEventArgs e)
         {
-            backButton.Visibility = System.Windows.Visibility.Hidden;
-            navigationRegion.Content = this.kinectRegionGrid;
+            if (navigationRegion.Content != kinectRegionGrid)
+            {
+                navigationRegion.Content = this.kinectRegionGrid;
+            } else
+            {
+                history.RemoveAt(history.Count - 1);
+                var type = SampleDataSource.GetGroup(history[history.Count - 1]).TypeGroup;
+                switch (type)
+                {
+                    case SampleDataCollection.GroupType.Menu:
+                        scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                        scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                        break;
+                    case SampleDataCollection.GroupType.News:
+                        scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                        scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                        break;
+                    case SampleDataCollection.GroupType.Courses:
+                        scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                        scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                        break;
+                }
+                this.itemsControl.ItemTemplate = (DataTemplate)this.FindResource(type + "Template");
+                this.itemsControl.ItemsSource = SampleDataSource.GetGroup(history[history.Count - 1]);
+                if (history[history.Count - 1] == "Menu")
+                {
+                    backButton.Visibility = System.Windows.Visibility.Hidden;
+                }
+            }
+        }
+
+        private void ItemsControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var temp = itemsControl.ItemTemplate.DataTemplateKey;
+            //if (itemsControl.ItemTemplate.DataTemplateKey == )
         }
     }
 }

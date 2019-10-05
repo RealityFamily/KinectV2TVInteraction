@@ -1,4 +1,4 @@
-﻿<!--
+﻿    <!--
     This file contains custom XAML styles that simplify Kinect for Windows development.
 -->
 
@@ -51,8 +51,8 @@
     </Style>
 
     <SolidColorBrush x:Key="ListViewItemPlaceholderBackgroundThemeBrush" Color="Black"/>
-    <SolidColorBrush x:Key="ListViewItemOverlayBackgroundThemeBrush" Color="DarkGray" />
-    <SolidColorBrush x:Key="ListViewItemOverlayForegroundThemeBrush" Color="Yellow" />
+    <SolidColorBrush x:Key="ListViewItemOverlayBackgroundThemeBrush" Color="Black"  Opacity="0.7"/>
+    <SolidColorBrush x:Key="ListViewItemOverlayForegroundThemeBrush" Color="White" />
     <SolidColorBrush x:Key="ListViewItemOverlaySecondaryForegroundThemeBrush" Color="Aqua"/>
     
     <Style x:Key="KinectTileButton" TargetType="Button">
@@ -86,8 +86,8 @@
     </Style>
 
     <DataTemplate x:Key="Kinect250x250ItemTemplate">
-        <Button Margin="3" Style="{StaticResource KinectTileButton}">
-            <Grid HorizontalAlignment="Left" Width="250" Height="250">
+        <Button Margin="5" Style="{StaticResource KinectTileButton}">
+            <Grid HorizontalAlignment="Left" Width="500" Height="250">
                 <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
                     <Image Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
                 </Border>
@@ -98,7 +98,59 @@
             </Grid>
         </Button>
     </DataTemplate>
-    
+
+    <DataTemplate x:Key="MenuTemplate">
+        <Button Margin="15" Style="{StaticResource KinectTileButton}">
+            <Border>
+                <Grid Width="850" Height="350" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        <TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" FontSize="45" HorizontalAlignment="Center" Margin="0 0 0 15"/>
+                        <TextBlock Text="{Binding Subtitle}" Foreground="{StaticResource ListViewItemOverlaySecondaryForegroundThemeBrush}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Button>
+    </DataTemplate>
+
+    <DataTemplate x:Key="CoursesTemplate">
+        <Button Margin="15" Style="{StaticResource KinectTileButton}">
+            <Border>
+                <Grid Width="850" Height="350" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        <TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" FontSize="45" HorizontalAlignment="Center" Margin="0 0 0 15"/>
+                        <TextBlock Text="{Binding Subtitle}" Foreground="{StaticResource ListViewItemOverlaySecondaryForegroundThemeBrush}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Button>
+    </DataTemplate>
+
+    <DataTemplate x:Key="NewsTemplate">
+        <Button Margin="15" Style="{StaticResource KinectTileButton}">
+            <Border>
+                <Grid Width="600" Height="600" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        <Image x:Name="NewsImage" Source="{Binding Source}" Stretch="UniformToFill"  Margin="15"/>
+                        <TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" FontSize="30" Margin="15 0" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Button>
+    </DataTemplate>
+
+    <DataTemplate x:Key="VideoTemplate">
+        <Button Margin="15" Style="{StaticResource KinectTileButton}">
+            <Border>
+                <Grid Width="600" Height="600" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        <Image x:Name="Image" Source="{Binding SampleDataItem.Source}" Stretch="UniformToFill"  Margin="0 0 0 15"/>
+                        <TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" FontSize="45" Margin="15 0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Button>
+    </DataTemplate>
+
     <!-- Button Text Style -->
     <Style x:Key="ButtonTextStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI" />

@@ -38,6 +38,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.11.15.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>packages\HtmlAgilityPack.1.11.15\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Kinect">
       <HintPath>$(KINECTSDK20_DIR)Assemblies\Microsoft.Kinect.dll</HintPath>
     </Reference>
@@ -64,6 +67,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\BindableBase.cs" />
+    <Compile Include="DataModel\CreateData.cs" />
     <Compile Include="DataModel\SampleDataSource.cs" />
     <Compile Include="HandPointers\HandInScreenEngagementModel.cs" />
     <Compile Include="Pages\ButtonSample.xaml.cs">
@@ -71,6 +75,9 @@
     </Compile>
     <Compile Include="Pages\CheckBoxRadioButtonSample.xaml.cs">
       <DependentUpon>CheckBoxRadioButtonSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Courses.xaml.cs">
+      <DependentUpon>Courses.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\EngagementSettings.xaml.cs">
       <DependentUpon>EngagementSettings.xaml</DependentUpon>
@@ -82,11 +89,17 @@
     <Compile Include="Pages\KinectPointerPointSample.xaml.cs">
       <DependentUpon>KinectPointerPointSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\News.xaml.cs">
+      <DependentUpon>News.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ScrollViewerSample.xaml.cs">
       <DependentUpon>ScrollViewerSample.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\SliderSample.xaml.cs">
       <DependentUpon>SliderSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\VideoPage.xaml.cs">
+      <DependentUpon>VideoPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="SelectionDisplay.xaml.cs">
       <DependentUpon>SelectionDisplay.xaml</DependentUpon>
@@ -119,6 +132,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\Courses.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\EngagementSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -131,6 +148,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\News.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ScrollViewerSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -138,6 +159,10 @@
     <Page Include="Pages\SliderSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\VideoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SelectionDisplay.xaml">
       <SubType>Designer</SubType>
@@ -163,6 +188,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -195,6 +221,36 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\ITlogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\TimeTables\2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\TimeTables\3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\TimeTables\4.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\TimeTables\5.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\TimeTables\6.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\TimeTables\1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\1.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
