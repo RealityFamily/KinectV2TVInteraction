@@ -93,6 +93,9 @@
     <Compile Include="Pages\News.xaml.cs">
       <DependentUpon>News.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\NewsList.xaml.cs">
+      <DependentUpon>NewsList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ScrollViewerSample.xaml.cs">
       <DependentUpon>ScrollViewerSample.xaml</DependentUpon>
     </Compile>
@@ -150,6 +153,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\News.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\NewsList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

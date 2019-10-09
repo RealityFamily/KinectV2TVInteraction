@@ -24,13 +24,20 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
+            <MediaElement x:Name="BackgroungVideo" Grid.RowSpan="2" Panel.ZIndex="1" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
+            <Button Panel.ZIndex="2" x:Name="MenuButton" Grid.RowSpan="2" Width="400" Height="150" Visibility="Collapsed" Click="MenuButton_Click" Style="{StaticResource KinectTileButton}">
+                <Grid Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}" Width="400" Height="150">
+                    <TextBlock Text="Нажмите, чтобы начать работу" HorizontalAlignment="Center" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}"/>
+                </Grid>                
+            </Button>
+
             <ContentControl Grid.Row="0" x:Name="navigationRegion" Margin="15">
                 <Grid x:Name="kinectRegionGrid" Margin="20">
                     <ScrollViewer Grid.Row="0" Name="scrollViewer" 
                                   HorizontalScrollBarVisibility="Disabled"
                                   VerticalScrollBarVisibility="Disabled" 
                                   k:KinectRegion.IsScrollInertiaEnabled="true" >
-                        <ItemsControl Grid.Row="0" Name="itemsControl" Button.Click="ButtonClick" DataContextChanged="ItemsControl_DataContextChanged">
+                        <ItemsControl Grid.Row="0" Name="itemsControl" Button.Click="ButtonClick">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel  Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" />

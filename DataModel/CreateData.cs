@@ -19,13 +19,24 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.DataModel
             int i = 0;
             foreach (var video in AllFiles)
             {
-                video_group.Items.Add(new SampleDataItem(
-                    "Video-" + i.ToString(),
-                    Path.GetFileNameWithoutExtension(video),
-                    string.Empty,
-                    SampleDataItem.TaskType.Page,
-                    typeof(VideoPage),
-                    SampleDataSource.StringToArr(video)));
+                if (Path.GetFileNameWithoutExtension(video) == "Main")
+                {
+                    video_group.Items.Add(new SampleDataItem(
+                        "Video-Main",
+                        "РТУ МИРЭА",
+                        string.Empty,
+                        SampleDataItem.TaskType.Page,
+                        typeof(VideoPage),
+                        SampleDataSource.StringToArr(video)));
+                } else {
+                    video_group.Items.Add(new SampleDataItem(
+                        "Video-" + i.ToString(),
+                        Path.GetFileNameWithoutExtension(video),
+                        string.Empty,
+                        SampleDataItem.TaskType.Page,
+                        typeof(VideoPage),
+                        SampleDataSource.StringToArr(video)));
+                }
                 i++;
             }
 

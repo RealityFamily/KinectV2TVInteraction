@@ -22,7 +22,10 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
     /// </summary>
     public partial class MainWindow
     {
-        private List<string> history = new List<string>();
+        private bool IsPlaying;
+
+        public static List<string> history = new List<string>();
+        public static ContentControl var_navigationRegion;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class. 
@@ -30,6 +33,8 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
         public MainWindow()
         {
             this.InitializeComponent();
+
+            var_navigationRegion = navigationRegion;
 
             CreateData.GetAllVideos();
             CreateData.GetNewsFromSite();
@@ -48,6 +53,46 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
             history.Add("Menu");
             this.itemsControl.ItemTemplate = (DataTemplate) this.FindResource(sampleDataSource.TypeGroup + "Template");
             this.itemsControl.ItemsSource = sampleDataSource;
+
+            BodyFrameReader bodyFrameReader = this.kinectRegion.KinectSensor.BodyFrameSource.OpenReader();
+            bodyFrameReader.FrameArrived += BodyFrameReader_FrameArrived;
+
+            //BackgroungVideo.Source = new Uri(SampleDataSource.GetItem("Video-Main").Parametrs[0].ToString());
+            //BackgroungVideo.MediaEnded += BackgroungVideo_MediaEnded;
+            //IsPlaying = true;
+            //BackgroungVideo.Play();
+        }
+
+        private void BackgroungVideo_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            BackgroungVideo.Stop();
+            IsPlaying = true;
+            BackgroungVideo.Play();
+        }
+
+        private void BodyFrameReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
+        {
+            using(BodyFrame bodyFrame = e.FrameReference.AcquireFrame())
+            {
+                if (bodyFrame != null)
+                {
+                    if (bodyFrame.BodyCount > 0)
+                    {
+                        if (IsPlaying)
+                        {
+                            MenuButton.Visibility = Visibility.Visible;
+                        }
+                    } else
+                    {
+                        if (IsPlaying)
+                        {
+                            MenuButton.Visibility = Visibility.Collapsed;
+                            BackgroungVideo.Visibility = Visibility.Visible;
+                            BackgroungVideo.Play();
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -64,6 +109,7 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
             {
                 if (sampleDataItem.Task == SampleDataItem.TaskType.Page && sampleDataItem.NavigationPage != null)
                 {
+                    history.Add(sampleDataItem.UniqueId);
                     backButton.Visibility = System.Windows.Visibility.Visible;
                     navigationRegion.Content = Activator.CreateInstance(sampleDataItem.NavigationPage, sampleDataItem.Parametrs);
                 } 
@@ -72,21 +118,6 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
                     history.Add(sampleDataItem.NewGroup);
                     backButton.Visibility = System.Windows.Visibility.Visible;
                     var type = SampleDataSource.GetGroup(sampleDataItem.NewGroup).TypeGroup;
-                    switch (type)
-                    {
-                        case SampleDataCollection.GroupType.Menu:
-                            scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
-                            scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
-                            break;
-                        case SampleDataCollection.GroupType.News:
-                            scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
-                            scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-                            break;
-                        case SampleDataCollection.GroupType.Courses:
-                            scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-                            scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
-                            break;
-                    }
                     this.itemsControl.ItemTemplate = (DataTemplate) this.FindResource(type + "Template");
                     this.itemsControl.ItemsSource = SampleDataSource.GetGroup(sampleDataItem.NewGroup);
                 }
@@ -125,41 +156,44 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
         /// <param name="e">Event arguments</param>
         private void GoBack(object sender, RoutedEventArgs e)
         {
-            if (navigationRegion.Content != kinectRegionGrid)
+            //if (navigationRegion.Content != kinectRegionGrid)
+            //{
+            //    navigationRegion.Content = this.kinectRegionGrid;
+            //} 
+            //else
+            //{
+            history.RemoveAt(history.Count - 1);
+            SampleDataItem sampleDataItem = SampleDataSource.GetItem(history[history.Count - 1]);
+
+            if (sampleDataItem == null)
             {
                 navigationRegion.Content = this.kinectRegionGrid;
-            } else
-            {
-                history.RemoveAt(history.Count - 1);
-                var type = SampleDataSource.GetGroup(history[history.Count - 1]).TypeGroup;
-                switch (type)
-                {
-                    case SampleDataCollection.GroupType.Menu:
-                        scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
-                        scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
-                        break;
-                    case SampleDataCollection.GroupType.News:
-                        scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
-                        scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-                        break;
-                    case SampleDataCollection.GroupType.Courses:
-                        scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-                        scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
-                        break;
-                }
-                this.itemsControl.ItemTemplate = (DataTemplate)this.FindResource(type + "Template");
-                this.itemsControl.ItemsSource = SampleDataSource.GetGroup(history[history.Count - 1]);
-                if (history[history.Count - 1] == "Menu")
-                {
-                    backButton.Visibility = System.Windows.Visibility.Hidden;
-                }
+                this.itemsControl.ItemTemplate = (DataTemplate)this.FindResource(SampleDataSource.GetGroup("Menu").TypeGroup + "Template");
+                this.itemsControl.ItemsSource = SampleDataSource.GetGroup("Menu");
             }
+            else if (sampleDataItem.Task == SampleDataItem.TaskType.Page && sampleDataItem.NavigationPage != null)
+            {
+                navigationRegion.Content = Activator.CreateInstance(sampleDataItem.NavigationPage, sampleDataItem.Parametrs);
+            }
+            else if (sampleDataItem.Task == SampleDataItem.TaskType.ChangeGroup && sampleDataItem.NewGroup != null)
+            {
+                var type_b = SampleDataSource.GetGroup(history[history.Count - 1]).TypeGroup;
+                this.itemsControl.ItemTemplate = (DataTemplate)this.FindResource(type_b + "Template");
+                this.itemsControl.ItemsSource = SampleDataSource.GetGroup(sampleDataItem.NewGroup);
+            }
+            if (history[history.Count - 1] == "Menu")
+            {
+                backButton.Visibility = System.Windows.Visibility.Hidden;
+            }
+            //}
         }
 
-        private void ItemsControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
-            var temp = itemsControl.ItemTemplate.DataTemplateKey;
-            //if (itemsControl.ItemTemplate.DataTemplateKey == )
+            BackgroungVideo.Stop();
+            BackgroungVideo.Visibility = Visibility.Collapsed;
+            MenuButton.Visibility = Visibility.Collapsed;
+            IsPlaying = false;
         }
     }
 }

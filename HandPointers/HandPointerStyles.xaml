@@ -115,7 +115,7 @@
     <DataTemplate x:Key="CoursesTemplate">
         <Button Margin="15" Style="{StaticResource KinectTileButton}">
             <Border>
-                <Grid Width="850" Height="350" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
+                <Grid Width="850" Height="250" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
                         <TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" FontSize="45" HorizontalAlignment="Center" Margin="0 0 0 15"/>
                         <TextBlock Text="{Binding Subtitle}" Foreground="{StaticResource ListViewItemOverlaySecondaryForegroundThemeBrush}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap" HorizontalAlignment="Center"/>

@@ -43,53 +43,6 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.DataModel
 
         public SampleDataSource()
         {
-            var group1 = new SampleDataCollection(
-                    "Group-1",
-                    null,
-                    SampleDataCollection.GroupType.Menu
-                   );
-            group1.Items.Add(
-                    new SampleDataItem(
-                        "Group-1-Item-1",
-                        "Buttons",
-                        SampleDataItem.TaskType.Page,
-                        typeof(ButtonSample),
-                        StringToArr()));
-            group1.Items.Add(
-                    new SampleDataItem(
-                        "Group-1-Item-2",
-                        "CheckBoxes and RadioButtons",
-                        SampleDataItem.TaskType.Page,
-                        typeof(CheckBoxRadioButtonSample),
-                        StringToArr()));
-            group1.Items.Add(
-                    new SampleDataItem(
-                        "Group-1-Item-5",
-                        "Zoomable Photo",
-                        SampleDataItem.TaskType.Page,
-                        typeof(ScrollViewerSample),
-                        StringToArr()));
-            group1.Items.Add(
-                    new SampleDataItem(
-                        "Group-1-Item-6",
-                        "Kinect Pointer Events",
-                        SampleDataItem.TaskType.Page,
-                        typeof(KinectPointerPointSample),
-                        StringToArr()));
-            /* group1.Items.Add(
-                     new SampleDataItem(
-                         "Group-1-Item-7",
-                         "Engagement and Cursor Settings",
-                         "",
-                         SampleDataSource.darkGrayImage,
-                         "Enables user to switch between engagement models and cursor visuals.",
-                         itemContent,
-                         group1,
-                         SampleDataItem.TaskType.Page,
-                         typeof(EngagementSettings)));*/
-            this.AllGroups.Add(group1);
-
-
             var group_main = new SampleDataCollection(
                 "Menu",
                 "Menu",
@@ -106,8 +59,9 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.DataModel
                 new SampleDataItem(
                     "Menu-2",
                     "Новости",
-                    SampleDataItem.TaskType.ChangeGroup,
-                    "News"
+                    SampleDataItem.TaskType.Page,
+                    typeof(NewsList),
+                    StringToArr()
                     ));
             group_main.Items.Add(
                 new SampleDataItem(
@@ -176,47 +130,6 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.DataModel
                     StringToArr("/Images/TimeTables/6.jpg")));
 
             this.AllGroups.Add(group_course);
-
-
-            //var group_news = new SampleDataCollection(
-            //    "News",
-            //    "Новости",
-            //    SampleDataCollection.GroupType.News);
-
-            //group_news.Items.Add(
-            //    new SampleDataItem(
-            //        "News-1",
-            //        "Первая новость",
-            //        string.Empty,
-            //        SampleDataItem.TaskType.Page,
-            //        typeof(News),
-            //        "Это первая тестовая новость.\nЧисто для проверки, как это будет выглядеть.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nЛол, робит"));
-
-            //this.AllGroups.Add(group_news);
-
-
-            //var group_video = new SampleDataCollection(
-            //    "Video",
-            //    "Видео",
-            //    SampleDataCollection.GroupType.News);
-
-            //group_video.Items.Add(
-            //    new SampleDataItem(
-            //        "Video-1",
-            //        "Обращение Андрея Сергеевича к первокурсникам",
-            //        SampleDataItem.TaskType.Page,
-            //        typeof(VideoPage),
-            //        StringToArr("Videos/1.mp4")));
-
-            //group_video.Items.Add(
-            //    new SampleDataItem(
-            //        "Video-1",
-            //        "О программе курсов",
-            //        SampleDataItem.TaskType.Page,
-            //        typeof(VideoPage),
-            //        StringToArr("Videos/2.mp4")));
-
-            //this.AllGroups.Add(group_video);
 
         }
 
