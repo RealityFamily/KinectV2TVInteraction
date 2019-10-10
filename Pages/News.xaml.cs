@@ -50,6 +50,7 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.Pages
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            MainWindow.UIInvoked();
             string URI = CurrentImage.Source.ToString();
             int index = ImageList.IndexOf(URI);
 

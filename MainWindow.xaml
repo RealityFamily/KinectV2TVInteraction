@@ -14,7 +14,7 @@
         MinHeight="700"
         FontFamily="Segoe UI"
         WindowState="Maximized"
-        WindowStyle="None"
+        WindowStyle="None" Cursor="None"
         >
     
     <k:KinectRegion x:Name="kinectRegion">
@@ -24,7 +24,8 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <MediaElement x:Name="BackgroungVideo" Grid.RowSpan="2" Panel.ZIndex="1" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
+            <Image x:Name="BackgroungImage" Grid.RowSpan="2" Panel.ZIndex="3" Source="/Images/Gerb.png" Width="1920" Height="1088"/>
+            <MediaElement x:Name="BackgroungVideo" Grid.RowSpan="2" Panel.ZIndex="1" LoadedBehavior="Manual" UnloadedBehavior="Manual" Volume="1" Width="1920" Height="1088"/>
             <Button Panel.ZIndex="2" x:Name="MenuButton" Grid.RowSpan="2" Width="400" Height="150" Visibility="Collapsed" Click="MenuButton_Click" Style="{StaticResource KinectTileButton}">
                 <Grid Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}" Width="400" Height="150">
                     <TextBlock Text="Нажмите, чтобы начать работу" HorizontalAlignment="Center" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}"/>
@@ -68,7 +69,7 @@
                     </Grid.RowDefinitions>
 
                     <k:KinectUserViewer Grid.Row="0" />
-                    <TextBlock Grid.Row="1" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontSize="18" Text="RTU Mirea Media Lab"/>
+                    <TextBlock Grid.Row="1" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontSize="18" Text="RTU IT Lab"/>
                 </Grid>
             </Grid>
         </Grid>

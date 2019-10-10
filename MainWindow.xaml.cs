@@ -9,6 +9,8 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
+    using System.Threading;
     using System.Windows;
     using System.Windows.Automation.Peers;
     using System.Windows.Automation.Provider;
@@ -22,10 +24,21 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
     /// </summary>
     public partial class MainWindow
     {
-        private bool IsPlaying;
-
         public static List<string> history = new List<string>();
         public static ContentControl var_navigationRegion;
+
+        private static bool needCheckTime;
+
+        private static DateTime LastUIOperation;
+        private static MainWindow instance = default;
+        private static bool isBackgroundEnabled = true;
+        private static Timer timer;
+
+        static MainWindow()
+        {
+            timer = new Timer(CheckPersonIsRemoved, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+            needCheckTime = bool.Parse(System.IO.File.ReadAllText("time.txt"));
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class. 
@@ -33,6 +46,11 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
         public MainWindow()
         {
             this.InitializeComponent();
+
+            instance = this;
+
+            CheckTime();
+
 
             var_navigationRegion = navigationRegion;
 
@@ -45,55 +63,72 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
             App app = ((App)Application.Current);
             app.KinectRegion = kinectRegion;
 
+            var handHelper = new HandOverHelper(kinectRegion);
+
             // Use the default sensor
             this.kinectRegion.KinectSensor = KinectSensor.GetDefault();
 
             //// Add in display content
             var sampleDataSource = SampleDataSource.GetGroup("Menu");
             history.Add("Menu");
-            this.itemsControl.ItemTemplate = (DataTemplate) this.FindResource(sampleDataSource.TypeGroup + "Template");
+            this.itemsControl.ItemTemplate = (DataTemplate)this.FindResource(sampleDataSource.TypeGroup + "Template");
             this.itemsControl.ItemsSource = sampleDataSource;
 
+            // Open a Main video when nowbody use system
             BodyFrameReader bodyFrameReader = this.kinectRegion.KinectSensor.BodyFrameSource.OpenReader();
-            bodyFrameReader.FrameArrived += BodyFrameReader_FrameArrived;
 
-            //BackgroungVideo.Source = new Uri(SampleDataSource.GetItem("Video-Main").Parametrs[0].ToString());
-            //BackgroungVideo.MediaEnded += BackgroungVideo_MediaEnded;
-            //IsPlaying = true;
-            //BackgroungVideo.Play();
+            handHelper.OnHoverStart += () => Log("start");
+            handHelper.OnHoverEnd += () => Log("end");
+
+
+            handHelper.OnHoverStart += () =>
+            {
+                UIInvoked();
+                Log("Lenya start 1");
+                try
+                {
+                    UI(() =>
+                    {
+                        if (instance.BackgroungVideo.Visibility == Visibility.Visible)
+                        {
+                            MenuButton.Visibility = Visibility.Visible;
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Log(ex.Message);
+                    throw;
+                }
+
+                Log("Lenya start 2");
+            };
+
+            BackgroungVideo.Source = new Uri(SampleDataSource.GetItem("Video-Main").Parametrs[0].ToString());
+            BackgroungVideo.MediaEnded += BackgroungVideo_MediaEnded;
+            BackgroungVideo.Play();
+        }
+
+        private void CheckTime()
+        {
+            if (needCheckTime && (DateTime.Now.Hour >= 22 || DateTime.Now.Hour < 8))
+            {
+                BackgroungImage.Visibility = Visibility.Visible;
+                BackgroungVideo.Volume = 0;
+            }
+            else
+            {
+                BackgroungImage.Visibility = Visibility.Collapsed;
+                BackgroungVideo.Volume = 1;
+            }
         }
 
         private void BackgroungVideo_MediaEnded(object sender, RoutedEventArgs e)
         {
             BackgroungVideo.Stop();
-            IsPlaying = true;
             BackgroungVideo.Play();
         }
 
-        private void BodyFrameReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
-        {
-            using(BodyFrame bodyFrame = e.FrameReference.AcquireFrame())
-            {
-                if (bodyFrame != null)
-                {
-                    if (bodyFrame.BodyCount > 0)
-                    {
-                        if (IsPlaying)
-                        {
-                            MenuButton.Visibility = Visibility.Visible;
-                        }
-                    } else
-                    {
-                        if (IsPlaying)
-                        {
-                            MenuButton.Visibility = Visibility.Collapsed;
-                            BackgroungVideo.Visibility = Visibility.Visible;
-                            BackgroungVideo.Play();
-                        }
-                    }
-                }
-            }
-        }
 
         /// <summary>
         /// Handle a button click from the wrap panel.
@@ -101,7 +136,8 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
         /// <param name="sender">Event sender</param>
         /// <param name="e">Event arguments</param>
         private void ButtonClick(object sender, RoutedEventArgs e)
-        {            
+        {
+            UIInvoked();
             var button = (Button)e.OriginalSource;
             SampleDataItem sampleDataItem = button.DataContext as SampleDataItem;
 
@@ -112,18 +148,18 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
                     history.Add(sampleDataItem.UniqueId);
                     backButton.Visibility = System.Windows.Visibility.Visible;
                     navigationRegion.Content = Activator.CreateInstance(sampleDataItem.NavigationPage, sampleDataItem.Parametrs);
-                } 
+                }
                 if (sampleDataItem.Task == SampleDataItem.TaskType.ChangeGroup && sampleDataItem.NewGroup != null)
                 {
                     history.Add(sampleDataItem.NewGroup);
                     backButton.Visibility = System.Windows.Visibility.Visible;
                     var type = SampleDataSource.GetGroup(sampleDataItem.NewGroup).TypeGroup;
-                    this.itemsControl.ItemTemplate = (DataTemplate) this.FindResource(type + "Template");
+                    this.itemsControl.ItemTemplate = (DataTemplate)this.FindResource(type + "Template");
                     this.itemsControl.ItemsSource = SampleDataSource.GetGroup(sampleDataItem.NewGroup);
                 }
                 if (sampleDataItem.Task == SampleDataItem.TaskType.Execute && sampleDataItem.Parametrs != null)
                 {
-                    Process.Start((string) sampleDataItem.Parametrs[0]);
+                    Process.Start((string)sampleDataItem.Parametrs[0]);
 
                     ButtonAutomationPeer peer = new ButtonAutomationPeer(backButton);
                     IInvokeProvider invokeProv = peer.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
@@ -162,14 +198,16 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
             //} 
             //else
             //{
+            UIInvoked();
             history.RemoveAt(history.Count - 1);
             SampleDataItem sampleDataItem = SampleDataSource.GetItem(history[history.Count - 1]);
 
             if (sampleDataItem == null)
             {
                 navigationRegion.Content = this.kinectRegionGrid;
-                this.itemsControl.ItemTemplate = (DataTemplate)this.FindResource(SampleDataSource.GetGroup("Menu").TypeGroup + "Template");
-                this.itemsControl.ItemsSource = SampleDataSource.GetGroup("Menu");
+                var type = SampleDataSource.GetGroup(history.Last()).TypeGroup;
+                this.itemsControl.ItemTemplate = (DataTemplate)this.FindResource(type + "Template");
+                this.itemsControl.ItemsSource = SampleDataSource.GetGroup(history[history.Count - 1]);
             }
             else if (sampleDataItem.Task == SampleDataItem.TaskType.Page && sampleDataItem.NavigationPage != null)
             {
@@ -190,10 +228,65 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
+            UIInvoked();
             BackgroungVideo.Stop();
             BackgroungVideo.Visibility = Visibility.Collapsed;
             MenuButton.Visibility = Visibility.Collapsed;
-            IsPlaying = false;
+        }
+
+
+        private static void CheckPersonIsRemoved(object state)
+        {
+            try
+            {
+                if (DateTime.Now - LastUIOperation > TimeSpan.FromMinutes(1))
+                {
+                    instance?.UI(() =>
+                    {
+                        if (instance.BackgroungVideo.Visibility != Visibility.Visible)
+                        {
+                            instance.MenuButton.Visibility = Visibility.Collapsed;
+                            instance.BackgroungVideo.Visibility = Visibility.Visible;
+                            instance.BackgroungVideo.Play();
+                        }
+                    });
+                }
+                if (DateTime.Now - LastUIOperation > TimeSpan.FromSeconds(15))
+                {
+                    instance?.UI(() =>
+                    {
+                        if (instance.MenuButton.Visibility == Visibility.Visible)
+                        {
+                            instance.MenuButton.Visibility = Visibility.Collapsed;
+                        }
+                    });
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public static void UIInvoked(DateTime dateTime = default)
+        {
+            if (dateTime == default)
+            {
+                LastUIOperation = DateTime.Now;
+            }
+            else
+            {
+                LastUIOperation = dateTime;
+            }
+        }
+
+        private void UI(Action action)
+        {
+            Dispatcher.Invoke(action);
+        }
+
+        public static void Log(string m)
+        {
+            System.IO.File.AppendAllLines("./logs.txt", new string[] { m });
         }
     }
 }

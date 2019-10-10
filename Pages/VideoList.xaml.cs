@@ -19,19 +19,19 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.Pages
     /// <summary>
     /// Логика взаимодействия для NewsList.xaml
     /// </summary>
-    public partial class NewsList : UserControl
+    public partial class VideoList : UserControl
     {
-        public NewsList()
+        public VideoList()
         {
             InitializeComponent();
 
-            this.itemsControl.ItemTemplate = (DataTemplate)this.FindResource(SampleDataSource.GetGroup("News").TypeGroup + "Template");
-            this.itemsControl.ItemsSource = SampleDataSource.GetGroup("News");
+            this.itemsControl.ItemTemplate = (DataTemplate)this.FindResource(SampleDataSource.GetGroup("Video").TypeGroup + "Template");
+            this.itemsControl.ItemsSource = SampleDataSource.GetGroup("Video");
         }
 
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
-            MainWindow.UIInvoked();
+
             var button = (Button)e.OriginalSource;
             SampleDataItem sampleDataItem = button.DataContext as SampleDataItem;
 

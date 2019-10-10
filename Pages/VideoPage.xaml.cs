@@ -30,6 +30,7 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.Pages
             Video.Source = uri;
             Video.Volume = 100;
             Video.Play();
+            Video.MediaOpened += (s, a) => MainWindow.UIInvoked(DateTime.Now  + Video.NaturalDuration.TimeSpan);
         }
 
         private void Video_MediaEnded(object sender, RoutedEventArgs e)
@@ -39,6 +40,7 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.Pages
 
         private void Play_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow.UIInvoked();
             play.Visibility = Visibility.Collapsed;
             Video.Stop();
             Video.Play();

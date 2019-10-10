@@ -65,14 +65,15 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.DataModel
                     ));
             group_main.Items.Add(
                 new SampleDataItem(
-                    "Menu-1",
+                    "Menu-3",
                     "Видео",
-                    SampleDataItem.TaskType.ChangeGroup,
-                    "Video"
+                    SampleDataItem.TaskType.Page,
+                    typeof(VideoList),
+                    StringToArr()
                     ));
             group_main.Items.Add(
                 new SampleDataItem(
-                    "Menu-1",
+                    "Menu-4",
                     "Игры",
                     SampleDataItem.TaskType.ChangeGroup,
                     "Games"
