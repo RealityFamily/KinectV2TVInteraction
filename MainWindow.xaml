@@ -37,7 +37,8 @@
                     <ScrollViewer Grid.Row="0" Name="scrollViewer" 
                                   HorizontalScrollBarVisibility="Disabled"
                                   VerticalScrollBarVisibility="Disabled" 
-                                  k:KinectRegion.IsScrollInertiaEnabled="true" >
+                                  k:KinectRegion.IsScrollInertiaEnabled="true"
+                                  ScrollChanged="scrollViewer_ScrollChanged">
                         <ItemsControl Grid.Row="0" Name="itemsControl" Button.Click="ButtonClick">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>

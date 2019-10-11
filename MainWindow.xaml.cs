@@ -33,7 +33,7 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
         private static MainWindow instance = default;
         private static bool isBackgroundEnabled = true;
         private static Timer timer;
-
+        private static HandOverHelper handHelper;
         static MainWindow()
         {
             timer = new Timer(CheckPersonIsRemoved, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
@@ -63,7 +63,7 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
             App app = ((App)Application.Current);
             app.KinectRegion = kinectRegion;
 
-            var handHelper = new HandOverHelper(kinectRegion);
+            handHelper = new HandOverHelper(kinectRegion, Dispatcher);
 
             // Use the default sensor
             this.kinectRegion.KinectSensor = KinectSensor.GetDefault();
@@ -83,7 +83,6 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
 
             handHelper.OnHoverStart += () =>
             {
-                UIInvoked();
                 Log("Lenya start 1");
                 try
                 {
@@ -91,6 +90,7 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
                     {
                         if (instance.BackgroungVideo.Visibility == Visibility.Visible)
                         {
+                            UIInvoked();
                             MenuButton.Visibility = Visibility.Visible;
                         }
                     });
@@ -245,6 +245,11 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
                     {
                         if (instance.BackgroungVideo.Visibility != Visibility.Visible)
                         {
+                            if (handHelper.IsHover)
+                            {
+                                LastUIOperation += TimeSpan.FromSeconds(10);
+                                return;
+                            }
                             instance.MenuButton.Visibility = Visibility.Collapsed;
                             instance.BackgroungVideo.Visibility = Visibility.Visible;
                             instance.BackgroungVideo.Play();
@@ -287,6 +292,11 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
         public static void Log(string m)
         {
             System.IO.File.AppendAllLines("./logs.txt", new string[] { m });
+        }
+
+        private void scrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            UIInvoked();
         }
     }
 }

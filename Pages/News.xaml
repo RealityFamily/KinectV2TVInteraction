@@ -20,7 +20,7 @@
             </Grid.RowDefinitions>
             
             <TextBlock x:Name="Title" FontSize="42" TextWrapping="Wrap" Grid.Row="0" FontWeight="Medium"/>
-            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Margin="0 20 0 0" k:KinectRegion.IsScrollInertiaEnabled="true" Grid.Row="1">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Margin="0 20 0 0" k:KinectRegion.IsScrollInertiaEnabled="true" Grid.Row="1" ScrollChanged="ScrollViewer_ScrollChanged">
                 <TextBlock x:Name="Content" FontSize="30" TextWrapping="Wrap"/>
             </ScrollViewer>
         </Grid>

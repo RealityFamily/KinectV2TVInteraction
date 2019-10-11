@@ -94,5 +94,10 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.Pages
                 break;
             }
         }
+
+        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            MainWindow.UIInvoked();
+        }
     }
 }

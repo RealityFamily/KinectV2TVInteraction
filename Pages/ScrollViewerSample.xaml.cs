@@ -26,5 +26,10 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
 
             ImageField.Source = bi3;
         }
+
+        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            MainWindow.UIInvoked();
+        }
     }
 }

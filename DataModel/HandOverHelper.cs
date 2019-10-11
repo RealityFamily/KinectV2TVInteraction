@@ -17,9 +17,9 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.DataModel
         public event Action OnHoverStart;
         public event Action OnHoverEnd;
 
-        public HandOverHelper(KinectRegion kinectRegion)
+        public HandOverHelper(KinectRegion kinectRegion, Dispatcher d)
         {
-            var timer = new Timer((s) =>
+            var timer = new DispatcherTimer(TimeSpan.FromMilliseconds(33), DispatcherPriority.Normal, (s, a) =>
             {
                 var hoverNow = kinectRegion?.EngagedBodyTrackingIds?.Count > 0;
 
@@ -32,7 +32,7 @@ namespace Microsoft.Samples.Kinect.ControlsBasics.DataModel
                     OnHoverEnd?.Invoke();
                 }
                 IsHover = hoverNow;
-            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+            }, d);
             //Task.Run(async () =>
             //{
             //    MainWindow.Log("before wait");
