@@ -145,6 +145,19 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
             {
                 if (sampleDataItem.Task == SampleDataItem.TaskType.Page && sampleDataItem.NavigationPage != null)
                 {
+                    //if (sampleDataItem.Title == "Новости")
+                    //{
+                    //    CreateData.GetNewsFromSite();
+                    //}
+                    //else if (sampleDataItem.Title == "Видео")
+                    //{
+                    //    CreateData.GetAllVideos();
+                    //}
+                    //else if (sampleDataItem.Title == "Игры")
+                    //{
+                    //    CreateData.GetGames();
+                    //}
+
                     history.Add(sampleDataItem.UniqueId);
                     backButton.Visibility = System.Windows.Visibility.Visible;
                     navigationRegion.Content = Activator.CreateInstance(sampleDataItem.NavigationPage, sampleDataItem.Parametrs);
@@ -239,6 +252,8 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
         {
             try
             {
+                instance?.UI(() => instance.CheckTime());
+
                 if (DateTime.Now - LastUIOperation > TimeSpan.FromMinutes(1))
                 {
                     instance?.UI(() =>
@@ -265,7 +280,7 @@ namespace Microsoft.Samples.Kinect.ControlsBasics
                             instance.MenuButton.Visibility = Visibility.Collapsed;
                         }
                     });
-                }
+                } 
             }
             catch (Exception)
             {
